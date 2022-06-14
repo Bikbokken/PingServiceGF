@@ -1,0 +1,236 @@
+﻿@page "/"
+@using System.Net.NetworkInformation
+
+<style>
+    .Failed {
+        background-color: #ff9797;
+    }
+
+
+
+    .None {
+        background-color: #afa7a7;
+    }
+
+    .Success {
+        background-color: springgreen;
+    }
+
+    table {
+        background-color:#cfcfcf;
+    }
+
+    .Semi {
+        background-color:lightyellow;
+    }
+</style>
+<div style="margin-bottom:10px;" class="d-flex">
+    <div class="col">
+        <button class="btn btn-primary" @onclick="(() => PingAll(true))">Test All</button>
+    </div>
+    <div class="col" style="text-align: right">
+        <span>Last auto update: @Time (every 5 minutes)</span>
+    </div>
+</div>
+
+@foreach (string Category in Categories)
+{
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th scope="col">@Category</th>
+                <th scope="col">Address</th>
+                <th scope="col">Category</th>
+                <th scope="col">Status</th>
+                <th scope="col">Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Servers != null)
+            {
+                @foreach (Server Server in Servers.Where(x => x.Category == Category))
+                {
+                    <tr class="@Server.Status">
+                        <th>@Server.Name</th>
+                        <th>@Server.Address</th>
+                        <th>@Server.Category</th>
+                        @switch (Server.Status)
+                        {
+                            case Status.Failed:
+                                <td><img style="width:15%" src="cross-mark-emoji.png" /></td>
+                                break;
+                            case Status.Success:
+                                <td><img style="width:15%" src="check-mark-emoji.png" /></td>
+                                break;
+                            case Status.Semi:
+                                <td><img style="width:15%" src="warning-emoji.png" /></td>
+                                break;
+                            case Status.None:
+                                <td><img style="width:15%" src="question-mark-emoji.png" /></td>
+                                break;
+                        }
+                        <td>@Server.Message</td>
+                        <td><button class="btn btn-primary" @onclick="(() => Ping(Server.Address))">Test Ping</button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+<button class="btn btn-secondary" @onclick="(() => ShowConsole = !ShowConsole)">Console</button>
+
+@if (ShowConsole)
+{
+
+    <p>Console:</p>
+    @foreach (string Message in ConsoleMessages)
+    {
+        <p>@Message</p>
+    }
+}
+
+@code {
+
+    private string Time { get; set; }
+
+    public enum Status
+    {
+        Failed,
+        Success,
+        Semi,
+        None
+    }
+
+
+
+    public class Server
+    {
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public Status Status { get; set; }
+        public string Message { get; set; }
+        public string Category { get; set; }
+
+        public Server(string name, string address, Status status, string message, string category)
+        {
+            Name = name;
+            Address = address;
+            Status = status;
+            Message = message;
+            Category = category;
+        }
+    }
+
+    public List<string> Categories = new List<string>();
+    public List<string> ConsoleMessages = new List<string>();
+    public List<Server> Servers = new List<Server>();
+    private System.Threading.Timer? timer;
+
+    private bool ShowConsole { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        // Support Netværk
+        Categories.Add("Support Netværk");
+        Servers.Add(new Server("Router G0/0", "172.16.0.1", Status.None, "Unknown", "Support Netværk"));
+        Servers.Add(new Server("Switch VLAN", "172.16.0.2", Status.None, "Unknown", "Support Netværk"));
+        Servers.Add(new Server("S0/0/0", "172.16.52.1", Status.None, "Unknown", "Support Netværk"));
+
+
+        //Infrastruktur Netværk
+        Categories.Add("Infrastruktur Netværk");
+        Servers.Add(new Server("Router G0/0", "172.16.32.1", Status.None, "Unknown", "Infrastruktur Netværk"));
+        Servers.Add(new Server("Switch VLAN", "172.16.32.2", Status.None, "Unknown", "Infrastruktur Netværk"));
+        Servers.Add(new Server("S0/0/0", "172.16.52.5", Status.None, "Unknown", "Infrastruktur Netværk"));
+        Servers.Add(new Server("S0/0/1", "172.16.52.2", Status.None, "Unknown", "Infrastruktur Netværk"));
+
+        //Udvikling Netværk
+        Categories.Add("Udvikling Netværk");
+        Servers.Add(new Server("Router G0/0", "172.16.48.1", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("Switch VLAN", "172.16.48.2", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("S0/0/1", "172.16.52.1", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("Server", "172.16.48.5", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("AP", "172.16.48.15", Status.None, "Unknown", "Udvikling Netværk"));
+
+
+
+        var timer = new System.Threading.Timer((_) =>
+        {
+            Time = DateTime.UtcNow.ToString();
+            InvokeAsync(() =>
+            {
+                PingAll(false);
+            });
+        }, null, 0, 300000);
+
+
+    }
+    public async void Ping(string Address)
+    {
+        var pingSender = new Ping();
+        var hostNameOrAddress = Address;
+        ConsoleMessages.Add($"PING {hostNameOrAddress}");
+
+        int SuccessCount = 0;
+
+        Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Pinging..");
+        Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.None);
+
+        for (int i = 0; i < 5; i++)
+        {
+            try
+            {
+                var reply = await pingSender.SendPingAsync(hostNameOrAddress);
+                ConsoleMessages.Add($"{reply.Buffer.Length} bytes from {reply.Address}:" +
+                                $" icmp_seq={i} status={reply.Status} time={reply.RoundtripTime}ms");
+                if ($"{reply.Status}" == "Success")
+                {
+                    SuccessCount++;
+                }
+                StateHasChanged();
+            }
+            catch
+            {
+                Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed);
+                Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Failed");
+                ConsoleMessages.Add($"{hostNameOrAddress} KUNNE IKKE FINDES");
+
+            }
+
+        }
+        if (SuccessCount == 5)
+        {
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Success);
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Success");
+        }
+        else if (SuccessCount == 0)
+        {
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed);
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Failed");
+        }
+        else
+        {
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Semi);
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = $"Ping Failed - {SuccessCount}/5");
+        }
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public void PingAll(bool? client)
+    {
+        foreach (Server Server in Servers)
+        {
+            if (client == true)
+            {
+                Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Status = Status.None);
+                Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Message = "Pinging..");
+            }
+            Ping(Server.Address);
+        }
+    }
+}
