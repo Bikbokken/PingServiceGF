@@ -1,0 +1,7 @@
+C:\Users\Benjamin\Desktop\PingServiceGF\PingServiceGF\obj\Release\net6.0\PubTmp\Out\PingService.exe
+C:\Users\Benjamin\Desktop\PingServiceGF\PingServiceGF\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Users\Benjamin\Desktop\PingServiceGF\PingServiceGF\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Users\Benjamin\Desktop\PingServiceGF\PingServiceGF\obj\Release\net6.0\PubTmp\Out\PingService.dll
+C:\Users\Benjamin\Desktop\PingServiceGF\PingServiceGF\obj\Release\net6.0\PubTmp\Out\PingService.deps.json
+C:\Users\Benjamin\Desktop\PingServiceGF\PingServiceGF\obj\Release\net6.0\PubTmp\Out\PingService.runtimeconfig.json
+C:\Users\Benjamin\Desktop\PingServiceGF\PingServiceGF\obj\Release\net6.0\PubTmp\Out\PingService.pdb

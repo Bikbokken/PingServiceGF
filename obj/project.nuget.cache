@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2IRfeVz95swdIX5j56F3rYlz9yk09ebxMExOwwq49m+QV3S1VAtBYkQ59UX33Li8vCeI7iCPcbrw2UUhONZNfw==",
+  "dgSpecHash": "ij7Dwk2A0Ux+B8R0bY+ropfaGP/WhAHa6tE8v0SRXMdFSvm55+tWQF0EHp3wRR+rCytZhHx68Kdsjr9Qh+kj8g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Benjamin\\Desktop\\PingService\\PingService.csproj",
+  "projectFilePath": "C:\\Users\\Benjamin\\Desktop\\PingServiceGF\\PingServiceGF\\PingService.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Benjamin\\Desktop\\PingService\\PingService.csproj": {}
+    "C:\\Users\\Benjamin\\Desktop\\PingServiceGF\\PingServiceGF\\PingService.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Benjamin\\Desktop\\PingService\\PingService.csproj": {
+    "C:\\Users\\Benjamin\\Desktop\\PingServiceGF\\PingServiceGF\\PingService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Benjamin\\Desktop\\PingService\\PingService.csproj",
+        "projectUniqueName": "C:\\Users\\Benjamin\\Desktop\\PingServiceGF\\PingServiceGF\\PingService.csproj",
         "projectName": "PingService",
-        "projectPath": "C:\\Users\\Benjamin\\Desktop\\PingService\\PingService.csproj",
+        "projectPath": "C:\\Users\\Benjamin\\Desktop\\PingServiceGF\\PingServiceGF\\PingService.csproj",
         "packagesPath": "C:\\Users\\Benjamin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Benjamin\\Desktop\\PingService\\obj\\",
+        "outputPath": "C:\\Users\\Benjamin\\Desktop\\PingServiceGF\\PingServiceGF\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Benjamin\\AppData\\Roaming\\NuGet\\NuGet.Config",

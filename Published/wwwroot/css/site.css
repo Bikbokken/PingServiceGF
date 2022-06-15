@@ -62,3 +62,19 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+
+@keyframes ping {
+    0% {
+        background-color: white;
+    }
+
+    50% {
+        background-color: #ff9797;
+    }
+
+    100% {
+        background-color: white;
+    }
+}

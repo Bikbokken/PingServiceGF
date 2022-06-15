@@ -3,10 +3,10 @@
 
 <style>
     .Failed {
-        background-color: #ff9797;
+        animation:ping 0.3s infinite;
     }
-
-
+    
+    
 
     .None {
         background-color: #afa7a7;
@@ -26,10 +26,10 @@
 </style>
 <div style="margin-bottom:10px;" class="d-flex">
     <div class="col">
-        <button class="btn btn-primary" @onclick="(() => PingAll(true))">Test All</button>
+        <button class="btn btn-primary" @onclick="(() => PingAll(true))">Test Alle</button>
     </div>
     <div class="col" style="text-align: right">
-        <span>Last auto update: @Time (every 5 minutes)</span>
+        <span>Sidste auto-update: @Time (hvert minut)</span>
     </div>
 </div>
 
@@ -39,10 +39,10 @@
         <thead>
             <tr>
                 <th scope="col">@Category</th>
-                <th scope="col">Address</th>
-                <th scope="col">Category</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Kategori</th>
                 <th scope="col">Status</th>
-                <th scope="col">Message</th>
+                <th scope="col">Besked</th>
             </tr>
         </thead>
         <tbody>
@@ -152,18 +152,18 @@
         Servers.Add(new Server("Switch VLAN", "172.16.48.2", Status.None, "Unknown", "Udvikling Netværk"));
         Servers.Add(new Server("S0/0/1", "172.16.52.1", Status.None, "Unknown", "Udvikling Netværk"));
         Servers.Add(new Server("Server", "172.16.48.5", Status.None, "Unknown", "Udvikling Netværk"));
-        Servers.Add(new Server("AP", "172.16.48.15", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("AP", "172.16.48.3", Status.None, "Unknown", "Udvikling Netværk"));
 
 
 
         var timer = new System.Threading.Timer((_) =>
         {
-            Time = DateTime.UtcNow.ToString();
+            Time = DateTime.UtcNow.AddHours(2).ToString();
             InvokeAsync(() =>
             {
                 PingAll(false);
             });
-        }, null, 0, 300000);
+        }, null, 0, 60000);
 
 
     }
@@ -175,7 +175,7 @@
 
         int SuccessCount = 0;
 
-        Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Pinging..");
+        Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Pinger..");
         Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.None);
 
         for (int i = 0; i < 5; i++)
@@ -194,7 +194,7 @@
             catch
             {
                 Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed);
-                Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Failed");
+                Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Fejlede");
                 ConsoleMessages.Add($"{hostNameOrAddress} KUNNE IKKE FINDES");
 
             }
@@ -208,12 +208,12 @@
         else if (SuccessCount == 0)
         {
             Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed);
-            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Failed");
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Fejlede");
         }
         else
         {
             Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Semi);
-            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = $"Ping Failed - {SuccessCount}/5");
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = $"Ping Fejlede - {SuccessCount}/5");
         }
         await InvokeAsync(() =>
         {
@@ -228,7 +228,7 @@
             if (client == true)
             {
                 Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Status = Status.None);
-                Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Message = "Pinging..");
+                Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Message = "Pinger..");
             }
             Ping(Server.Address);
         }
