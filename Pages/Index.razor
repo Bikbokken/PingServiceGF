@@ -5,9 +5,6 @@
     .Failed {
         animation:ping 0.3s infinite;
     }
-    
-    
-
     .None {
         background-color: #afa7a7;
     }
@@ -15,24 +12,27 @@
     .Success {
         background-color: springgreen;
     }
-
     table {
         background-color:#cfcfcf;
     }
-
     .Semi {
         background-color:lightyellow;
     }
 </style>
+
+<!-- Dette er blot noget CSS kode (Cascading Style Sheets), som har indflydelse på designet af siden.
+    Der er blevet lavet nogle classes som repræsentere de forskellige statuses der er.-->
+
 <div style="margin-bottom:10px;" class="d-flex">
     <div class="col">
-        <button class="btn btn-primary" @onclick="(() => PingAll(true))">Test Alle</button>
+        <button class="btn btn-primary" @onclick="(() => PingAll(true))">Test Alle</button> <!-- Knappen "Test All" skal køre funktionen "PingAll" hvor "true" parses med -->
     </div>
     <div class="col" style="text-align: right">
-        <span>Sidste auto-update: @Time (hvert minut)</span>
+        <span>Sidste auto-update: @Time (hvert minut)</span> <!-- Dette paragraf tag skal vise, hvad klokken var, da den sidste auto update blev kørt. -->
     </div>
 </div>
 
+<!-- Der bliver lavet en foreach, som skal loppe igennem alle de kategorier som findes og oprette et individuelt tabel til dem.-->
 @foreach (string Category in Categories)
 {
     <table class="table table-borderless">
@@ -46,44 +46,46 @@
             </tr>
         </thead>
         <tbody>
-            @if (Servers != null)
+            <!-- Laver endnu en foreach, som lopper igennem alle de servere som er blevet assigned den kategori,
+            som der er i gang med at blive loppet igennem - denne opretter en ny "row" til tablet som er blevet oprettet over.-->
+            @foreach (Server Server in Servers.Where(x => x.Category == Category))
             {
-                @foreach (Server Server in Servers.Where(x => x.Category == Category))
-                {
-                    <tr class="@Server.Status">
-                        <th>@Server.Name</th>
-                        <th>@Server.Address</th>
-                        <th>@Server.Category</th>
-                        @switch (Server.Status)
-                        {
-                            case Status.Failed:
-                                <td><img style="width:15%" src="cross-mark-emoji.png" /></td>
-                                break;
-                            case Status.Success:
-                                <td><img style="width:15%" src="check-mark-emoji.png" /></td>
-                                break;
-                            case Status.Semi:
-                                <td><img style="width:15%" src="warning-emoji.png" /></td>
-                                break;
-                            case Status.None:
-                                <td><img style="width:15%" src="question-mark-emoji.png" /></td>
-                                break;
-                        }
-                        <td>@Server.Message</td>
-                        <td><button class="btn btn-primary" @onclick="(() => Ping(Server.Address))">Test Ping</button></td>
-                    </tr>
-                }
+                <tr class="@Server.Status">
+                    <th>@Server.Name</th>
+                    <th>@Server.Address</th>
+                    <th>@Server.Category</th>
+                    <!-- Laver en switch case, som skal switche igennem de forskellige status' som en server kan have. Derefter ville den give den passende emoji.-->
+                    @switch (Server.Status)
+                    {
+                        case Status.Failed:
+                            <td><img style="width:15%" src="cross-mark-emoji.png" /></td>
+                            break;
+                        case Status.Success:
+                            <td><img style="width:15%" src="check-mark-emoji.png" /></td>
+                            break;
+                        case Status.Semi:
+                            <td><img style="width:15%" src="warning-emoji.png" /></td>
+                            break;
+                        case Status.None:
+                            <td><img style="width:15%" src="question-mark-emoji.png" /></td>
+                            break;
+                    }
+                    <td>@Server.Message</td>
+                    <!-- Endnu en knap som er udefor hvert row, hvor man indivuelt kan vælge at pinge den server. Kører funktionen Ping, hvor server addressen parses med.-->
+                    <td><button class="btn btn-primary" @onclick="(() => Ping(Server.Address))">Test Ping</button></td>
+                </tr>
             }
         </tbody>
     </table>
 }
-
+<!-- Hvis der nu opstod nogle fejl, så kunne det være man gerne ville se hvad konsolen har at byde på. Det kan man med denne knap, som "inverter" værdien af en bool ved navn "ShowConsole"-->
 <button class="btn btn-secondary" @onclick="(() => ShowConsole = !ShowConsole)">Console</button>
-
+<!-- Er "ShowConsole" true? Så skal den gøre følgende:-->
 @if (ShowConsole)
 {
 
     <p>Console:</p>
+    <!-- Looper igennem en liste ved navn "ConsoleMessages" og viser dem på skærmen.-->
     @foreach (string Message in ConsoleMessages)
     {
         <p>@Message</p>
@@ -92,20 +94,17 @@
 
 @code {
 
-    private string Time { get; set; }
-
-    public enum Status
+    public DateTime Time { get; set; } // Opretter en variabel ved navn "Time" med typen "DateTime".
+    public enum Status //Oprettelse af en enum ved navn status, som repræsentere de forskellige statuses en server kan have.
     {
         Failed,
         Success,
         Semi,
         None
     }
-
-
-
-    public class Server
+    public class Server // Oprettelse af en class ved navn "Server", som er den "data-type" serverene kommer til at have.
     {
+        //Server klassen kommer til at indeholde følgende værdier:
         public string Name { get; set; }
         public string Address { get; set; }
         public Status Status { get; set; }
@@ -122,15 +121,16 @@
         }
     }
 
-    public List<string> Categories = new List<string>();
-    public List<string> ConsoleMessages = new List<string>();
-    public List<Server> Servers = new List<Server>();
-    private System.Threading.Timer? timer;
+    public List<string> Categories = new List<string>(); //Opretter en liste af strings ved navn "Categories".
+    public List<string> ConsoleMessages = new List<string>(); //Opretter en liste af strings ved navn "ConsoleMessages"
+    public List<Server> Servers = new List<Server>(); //Opretter en liste af "Server" ved navn "Servers"
+    public System.Threading.Timer? timer; //Opretter en "Timer" ved navn "timer".
 
-    private bool ShowConsole { get; set; } = false;
+    private bool ShowConsole { get; set; } = false; // Oprettelse af en bool ved navn "ShowConsole" hvor default valuen er "false".
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() // Når du loader siden køres denne funktion.
     {
+        //Tilføjer de forskellige kategorier og servere.
 
         // Support Netværk
         Categories.Add("Support Netværk");
@@ -140,99 +140,108 @@
         Servers.Add(new Server("Switch VLAN", "172.16.0.2", Status.None, "Unknown", "Support Netværk"));
 
 
-        //Infrastru Netværk
-        Categories.Add("Infrastru Netværk");
-        Servers.Add(new Server("Router G0/0", "172.16.32.1", Status.None, "Unknown", "Infrastru Netværk"));
-        Servers.Add(new Server("Router S0/0/0", "172.16.52.5", Status.None, "Unknown", "Infrastru Netværk"));
-        Servers.Add(new Server("Router S0/0/1", "172.16.52.2", Status.None, "Unknown", "Infrastru Netværk"));
-        Servers.Add(new Server("Switch VLAN", "172.16.32.2", Status.None, "Unknown", "Infrastru Netværk"));
-
         //Udvikling Netværk
         Categories.Add("Udvikling Netværk");
-        Servers.Add(new Server("Router G0/0", "172.16.48.1", Status.None, "Unknown", "Udvikling Netværk"));
-        Servers.Add(new Server("Router G0/1", "172.16.52.10", Status.None, "Unknown", "Udvikling Netværk"));
-        Servers.Add(new Server("Router S0/0/1", "172.16.52.6", Status.None, "Unknown", "Udvikling Netværk"));
-        Servers.Add(new Server("Switch VLAN", "172.16.48.2", Status.None, "Unknown", "Udvikling Netværk"));
-        Servers.Add(new Server("Server", "172.16.48.5", Status.None, "Unknown", "Udvikling Netværk"));
-        Servers.Add(new Server("AP", "172.16.48.3", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("Router G0/0", "172.16.32.1", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("Router S0/0/0", "172.16.52.5", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("Router S0/0/1", "172.16.52.2", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("Switch VLAN", "172.16.32.2", Status.None, "Unknown", "Udvikling Netværk"));
+
+        //Infrastruktur Netværk
+        Categories.Add("Infrastruktur Netværk");
+        Servers.Add(new Server("Router G0/0", "172.16.48.1", Status.None, "Unknown", "Infrastruktur Netværk"));
+        Servers.Add(new Server("Router G0/1", "172.16.52.10", Status.None, "Unknown", "Infrastruktur Netværk"));
+        Servers.Add(new Server("Router S0/0/1", "172.16.52.6", Status.None, "Unknown", "Infrastruktur Netværk"));
+        Servers.Add(new Server("Switch VLAN", "172.16.48.2", Status.None, "Unknown", "Infrastruktur Netværk"));
+        Servers.Add(new Server("Server", "172.16.48.5", Status.None, "Unknown", "Infrastruktur Netværk"));
+        Servers.Add(new Server("AP", "172.16.48.3", Status.None, "Unknown", "Infrastruktur Netværk"));
 
 
 
-        var timer = new System.Threading.Timer((_) =>
+        System.Threading.Timer timer = new System.Threading.Timer((_) => // Opretter en timer.
         {
-            Time = DateTime.UtcNow.AddHours(2).ToString();
-            InvokeAsync(() =>
+            Time = DateTime.UtcNow.AddHours(2); //Sætter "Time" til den nuværende tid + 2 timer, da den viste 2 timer bagud.
+            InvokeAsync(() => //Kører en asynktion funktion ved navn "PingAll(false)".
             {
                 PingAll(false);
             });
-        }, null, 0, 60000);
-
-
+        }, null, 0, 60000); //Kører hvert minut = 60000 milisekunder.
     }
+
+
+    /// <summary>
+    /// Pinger addressen som er givet. 
+    /// </summary>
+    /// <param name="Address"></param>
+    /// <returns>Sætter serverens status til den korrekte status.</returns>
     public async void Ping(string Address)
     {
-        var pingSender = new Ping();
-        var hostNameOrAddress = Address;
-        ConsoleMessages.Add($"PING {hostNameOrAddress}");
+        Ping PingSender = new Ping(); // Opretter en ny Ping klasse som kommer fra System.Net.NetworkInformation, som giver adgang til de forskellige ping services.
+        ConsoleMessages.Add($"PING {Address}"); //Tilføjer en besked til listen "ConsoleMessages".
+        int SuccessCount = 0; //Laver en int med værdien 0 - ved navn "SuccessCount".
 
-        int SuccessCount = 0;
+        Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Pinger.."); //Sætter serverens "Message" til "Pinger.."
+        Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.None); //Sætter serverens status til "None".
 
-        Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Pinger..");
-        Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.None);
-
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++) //Laver en for som kører 5 gange.
         {
-            try
+            try // Prøv at kør nedenstående - virker det ikke? Gå til "catch".
             {
-                var reply = await pingSender.SendPingAsync(hostNameOrAddress);
-                ConsoleMessages.Add($"{reply.Buffer.Length} bytes from {reply.Address}:" +
-                                $" icmp_seq={i} status={reply.Status} time={reply.RoundtripTime}ms");
-                if ($"{reply.Status}" == "Success")
+                PingReply Reply = await PingSender.SendPingAsync(Address); // Opretter en variabel ved navn "Reply" med datatypen "PingReply" - resultatet af den er, et asynkront ping til addressen. 
+
+                ConsoleMessages.Add($"{Reply.Buffer.Length} bytes from {Reply.Address}:" +
+                                $" icmp_seq={i} status={Reply.Status} time={Reply.RoundtripTime}ms"); // Tilføjer en console besked med respons.
+                if ($"{Reply.Status}" == "Success") //Er status på Replyet Success - tilføj en til inten "SuccessCount".
                 {
                     SuccessCount++;
                 }
-                StateHasChanged();
             }
-            catch
+            catch //Kunne den ikke køre ovenstående? Det kan være fordi addressen er udgyldig - kør følgende:
             {
-                Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed);
-                Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Fejlede");
-                ConsoleMessages.Add($"{hostNameOrAddress} KUNNE IKKE FINDES");
+                Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed); //Sæt status på serveren til fejlet.
+                Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Fejlede"); //Sæt message på serveren til "Ping fejlede"
+                ConsoleMessages.Add($"{Address} KUNNE IKKE FINDES"); //Tilføj en konsolbesked med, at addressen ikke fandtes.
 
             }
 
         }
-        if (SuccessCount == 5)
+        if (SuccessCount == 5) // Er successcount 5?
         {
-            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Success);
-            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Success");
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Success); //Sæt status på serveren til success.
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Success"); //Sæt message på serveren til "Ping Success".
         }
-        else if (SuccessCount == 0)
+        else if (SuccessCount == 0) // Er successcount 0?
         {
-            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed);
-            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Fejlede");
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed); //Sæt status pås erveren til faild.
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Fejlede"); //Sæt beskeden på serveren til "Ping fejlede".
         }
-        else
+        else //Er den hverken 5 eller 0?
         {
-            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Semi);
-            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = $"Ping Fejlede - {SuccessCount}/5");
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Semi); //Sæt status på serveren til "Semi" - altså den fejlede ikke, men den var ikke helt success.
+            Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = $"Ping Fejlede - {SuccessCount}/5"); //Sæt stauts på serveren til "Ping fejlede" og antallet af pings som fejlede. kunne f.eks. være 3/5
         }
-        await InvokeAsync(() =>
+        await InvokeAsync(() => //Kører en async funktion som "Refresher" klienten "silent" - altså du kan ikke se den refresher, men contet refresher.
+        //Grundet at timeren kører async, så skal denen funktion også være async.
         {
             StateHasChanged();
         });
     }
-
+    
+    /// <summary>
+    /// Pinger alle servere.
+    /// </summary>
+    /// <param name="client"></param>
+    /// <returns>Pinger alle servere som der findes.</returns>
     public void PingAll(bool? client)
     {
-        foreach (Server Server in Servers)
+        foreach (Server Server in Servers) //En foreach som kører igennem alle servere der er i listen "Servers".
         {
-            if (client == true)
+            if (client == true) //Er det en klient? så skal den resette alles status til "None" - vi ønsker ikke dette, når den automatisk pinger.
             {
-                Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Status = Status.None);
-                Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Message = "Pinger..");
+                Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Status = Status.None); //Sætter serverens status til none.
+                Servers.Where(w => w.Address == Server.Address).ToList().ForEach(s => s.Message = "Pinger.."); //Sætter serverens message til "pinger".
             }
-            Ping(Server.Address);
+            Ping(Server.Address); // Kør funktionen "Ping" hvor at addressen parses med alle servere.
         }
     }
 }
