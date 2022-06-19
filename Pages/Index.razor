@@ -156,8 +156,6 @@
         Servers.Add(new Server("Server", "172.16.48.5", Status.None, "Unknown", "Infrastruktur Netværk"));
         Servers.Add(new Server("AP", "172.16.48.3", Status.None, "Unknown", "Infrastruktur Netværk"));
 
-
-
         System.Threading.Timer timer = new System.Threading.Timer((_) => // Opretter en timer.
         {
             Time = DateTime.UtcNow.AddHours(2); //Sætter "Time" til den nuværende tid + 2 timer, da den viste 2 timer bagud.
@@ -182,6 +180,7 @@
 
         Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Pinger.."); //Sætter serverens "Message" til "Pinger.."
         Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.None); //Sætter serverens status til "None".
+        StateHasChanged();
 
         for (int i = 0; i < 5; i++) //Laver en for som kører 5 gange.
         {
@@ -201,7 +200,6 @@
                 Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Status = Status.Failed); //Sæt status på serveren til fejlet.
                 Servers.Where(w => w.Address == Address).ToList().ForEach(s => s.Message = "Ping Fejlede"); //Sæt message på serveren til "Ping fejlede"
                 ConsoleMessages.Add($"{Address} KUNNE IKKE FINDES"); //Tilføj en konsolbesked med, at addressen ikke fandtes.
-
             }
 
         }
