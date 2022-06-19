@@ -135,22 +135,24 @@
         // Support Netværk
         Categories.Add("Support Netværk");
         Servers.Add(new Server("Router G0/0", "172.16.0.1", Status.None, "Unknown", "Support Netværk"));
+        Servers.Add(new Server("Router G0/1", "172.16.52.9", Status.None, "Unknown", "Support Netværk"));
+        Servers.Add(new Server("Router S0/0/0", "172.16.52.1", Status.None, "Unknown", "Support Netværk"));
         Servers.Add(new Server("Switch VLAN", "172.16.0.2", Status.None, "Unknown", "Support Netværk"));
-        Servers.Add(new Server("S0/0/0", "172.16.52.1", Status.None, "Unknown", "Support Netværk"));
 
 
-        //Infrastruktur Netværk
-        Categories.Add("Infrastruktur Netværk");
-        Servers.Add(new Server("Router G0/0", "172.16.32.1", Status.None, "Unknown", "Infrastruktur Netværk"));
-        Servers.Add(new Server("Switch VLAN", "172.16.32.2", Status.None, "Unknown", "Infrastruktur Netværk"));
-        Servers.Add(new Server("S0/0/0", "172.16.52.5", Status.None, "Unknown", "Infrastruktur Netværk"));
-        Servers.Add(new Server("S0/0/1", "172.16.52.2", Status.None, "Unknown", "Infrastruktur Netværk"));
+        //Infrastru Netværk
+        Categories.Add("Infrastru Netværk");
+        Servers.Add(new Server("Router G0/0", "172.16.32.1", Status.None, "Unknown", "Infrastru Netværk"));
+        Servers.Add(new Server("Router S0/0/0", "172.16.52.5", Status.None, "Unknown", "Infrastru Netværk"));
+        Servers.Add(new Server("Router S0/0/1", "172.16.52.2", Status.None, "Unknown", "Infrastru Netværk"));
+        Servers.Add(new Server("Switch VLAN", "172.16.32.2", Status.None, "Unknown", "Infrastru Netværk"));
 
         //Udvikling Netværk
         Categories.Add("Udvikling Netværk");
         Servers.Add(new Server("Router G0/0", "172.16.48.1", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("Router G0/1", "172.16.52.10", Status.None, "Unknown", "Udvikling Netværk"));
+        Servers.Add(new Server("Router S0/0/1", "172.16.52.6", Status.None, "Unknown", "Udvikling Netværk"));
         Servers.Add(new Server("Switch VLAN", "172.16.48.2", Status.None, "Unknown", "Udvikling Netværk"));
-        Servers.Add(new Server("S0/0/1", "172.16.52.1", Status.None, "Unknown", "Udvikling Netværk"));
         Servers.Add(new Server("Server", "172.16.48.5", Status.None, "Unknown", "Udvikling Netværk"));
         Servers.Add(new Server("AP", "172.16.48.3", Status.None, "Unknown", "Udvikling Netværk"));
 
