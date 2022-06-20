@@ -98,7 +98,6 @@ C:\Users\Bruger\Desktop\PingServiceGF\obj\Release\net6.0\PingService.RazorAssemb
 C:\Users\Bruger\Desktop\PingServiceGF\obj\Release\net6.0\staticwebassets.build.json
 C:\Users\Bruger\Desktop\PingServiceGF\obj\Release\net6.0\staticwebassets.development.json
 C:\Users\Bruger\Desktop\PingServiceGF\obj\Release\net6.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
-C:\Users\Bruger\Desktop\PingServiceGF\obj\Release\net6.0\scopedcss\Shared\NavMenu.razor.rz.scp.css
 C:\Users\Bruger\Desktop\PingServiceGF\obj\Release\net6.0\scopedcss\bundle\PingService.styles.css
 C:\Users\Bruger\Desktop\PingServiceGF\obj\Release\net6.0\scopedcss\projectbundle\PingService.bundle.scp.css
 C:\Users\Bruger\Desktop\PingServiceGF\obj\Release\net6.0\PingService.dll
