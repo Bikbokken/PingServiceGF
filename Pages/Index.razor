@@ -48,14 +48,14 @@
         <tbody>
             <!-- Laver endnu en foreach, som lopper igennem alle de servere som er blevet assigned den kategori,
             som der er i gang med at blive loppet igennem - denne opretter en ny "row" til tablet som er blevet oprettet over.-->
-            @foreach (Server Server in Servers.Where(x => x.Category == Category))
+            @foreach (Server CurrentServer in Servers.Where(x => x.Category == Category))
             {
-                <tr class="@Server.Status">
-                    <th>@Server.Name</th>
-                    <th>@Server.Address</th>
-                    <th>@Server.Category</th>
+                <tr class="@CurrentServer.Status">
+                    <th>@CurrentServer.Name</th>
+                    <th>@CurrentServer.Address</th>
+                    <th>@CurrentServer.Category</th>
                     <!-- Laver en switch case, som skal switche igennem de forskellige status' som en server kan have. Derefter ville den give den passende emoji.-->
-                    @switch (Server.Status)
+                    @switch (CurrentServer.Status)
                     {
                         case Status.Failed:
                             <td><img style="width:15%" src="cross-mark-emoji.png" /></td>
@@ -70,9 +70,9 @@
                             <td><img style="width:15%" src="question-mark-emoji.png" /></td>
                             break;
                     }
-                    <td>@Server.Message</td>
+                    <td>@CurrentServer.Message</td>
                     <!-- Endnu en knap som er udefor hvert row, hvor man indivuelt kan vælge at pinge den server. Kører funktionen Ping, hvor server addressen parses med.-->
-                    <td><button class="btn btn-primary" @onclick="(() => Ping(Server.Address))">Test Ping</button></td>
+                    <td><button class="btn btn-primary" @onclick="(() => Ping(CurrentServer.Address))">Test Ping</button></td>
                 </tr>
             }
         </tbody>
