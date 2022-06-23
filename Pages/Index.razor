@@ -33,12 +33,12 @@
 </div>
 
 <!-- Der bliver lavet en foreach, som skal loppe igennem alle de kategorier som findes og oprette et individuelt tabel til dem.-->
-@foreach (string Category in Categories)
+@foreach (string CurrentCategory in Categories)
 {
     <table class="table table-borderless">
         <thead>
             <tr>
-                <th scope="col">@Category</th>
+                <th scope="col">@CurrentCategory</th>
                 <th scope="col">Adresse</th>
                 <th scope="col">Kategori</th>
                 <th scope="col">Status</th>
@@ -48,7 +48,7 @@
         <tbody>
             <!-- Laver endnu en foreach, som lopper igennem alle de servere som er blevet assigned den kategori,
             som der er i gang med at blive loppet igennem - denne opretter en ny "row" til tablet som er blevet oprettet over.-->
-            @foreach (Server CurrentServer in Servers.Where(x => x.Category == Category))
+            @foreach (Server CurrentServer in Servers.Where(x => x.Category == CurrentCategory))
             {
                 <tr class="@CurrentServer.Status">
                     <th>@CurrentServer.Name</th>
