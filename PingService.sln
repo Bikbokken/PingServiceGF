@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.31911.260
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PingService", "PingService.csproj", "{EBEC3AA8-29CC-42C2-83BC-DF7D93998B5D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBEC3AA8-29CC-42C2-83BC-DF7D93998B5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBEC3AA8-29CC-42C2-83BC-DF7D93998B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBEC3AA8-29CC-42C2-83BC-DF7D93998B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBEC3AA8-29CC-42C2-83BC-DF7D93998B5D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {960C0C58-2458-47AD-956D-0DF163B69BB7}
+	EndGlobalSection
+EndGlobal

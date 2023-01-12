@@ -1,8 +1,17 @@
 {
   "version": 2,
+<<<<<<< Updated upstream
   "dgSpecHash": "Aw47DdLZa8UL4LIzt8rx+N9eogLQHgOs9IkAuMvRUR7zZnBR+duQS0BlEbeu081nhnmXNVPTHYyrTuqX3yZ1HQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Bruger\\Desktop\\PingServiceGF\\PingService.csproj",
   "expectedPackageFiles": [],
+=======
+  "dgSpecHash": "PnVajJxkMtcnqqVaEGDpmrUQYKefFiR3B4bHko2W2WTLUt8u2Hx/0obNJoFBGyjtlbCduLWiK4rLLOSmdXQ4Lw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Benjamin\\Desktop\\PingServiceGF\\PingServiceGF\\PingService.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Benjamin\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.14.0\\microsoft.visualstudio.azure.containers.tools.targets.1.14.0.nupkg.sha512"
+  ],
+>>>>>>> Stashed changes
   "logs": []
 }
